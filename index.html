@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="Categorey"></div>
+    <div id="Users"></div>
+</body>
+
+<script>
+fetch('https://filltext.com/?rows=10&fnam={firstName}&lname={lastName}&category=["category1","category2","category3"]&pretty=true')
+.then(res => res.json()).then((out) => {
+
+    let category = [];
+    let fname = [];
+    let lname = [];
+    out.forEach(element => {
+        console.log('Output: ', element);
+        category.push(element.category);  
+    });
+
+    let uniquecategory = category.filter((element, index) => {
+            return category.indexOf(element) === index;
+    });
+    // get without duplication
+    uniquecategory.forEach(element => {
+        // get the element you want to add the button to
+        var categoryDiv = document.getElementById("Categorey");
+
+       // create the button object and add the text to it
+       var button = document.createElement("BUTTON");
+       button.innerHTML = element;
+       button.setAttribute("class","category");
+       button.setAttribute("id",element);
+       button.style = 'border-radius: 25px;background: #1E90FF;width: 100px; height:20px; margin: 10px;  border: 1px solid black;'
+       // add the button to the div
+       categoryDiv.appendChild(button);
+  
+
+    });
+    //draw  users
+    out.forEach(element => {
+        // get the element you want to add the list to
+        var usersDiv = document.getElementById("Users");
+        const divlist = document.createElement("DIV");
+        divlist.setAttribute("class","DivContainer");
+        divlist.setAttribute("data-category",element.category);
+        divlist.style = 'position: relative; border-radius: 25px; border: 2px solid black; padding: 20px 10px; width: 400px; height: 100px;margin-bottom: 10px;'
+        usersDiv.appendChild(divlist);
+         // create the button object and add the text to it
+         var button = document.createElement("BUTTON");
+         button.setAttribute("class","Button1");
+         button.style = 'display:block; height: 70px; width: 70px; border-radius: 50%; border: 1px solid black;  position: absolute;top: 30px; left: 10px; font-weight: bold; font-size: 30px;';
+         button.innerHTML = element.fnam.charAt(0)+element.lname.charAt(0);
+        // add the button to the div
+        divlist.appendChild(button);
+        //set first name and last name in p
+        const flname = document.createElement("p");
+        flname.setAttribute("class","flname");
+        flname.style ='position: absolute;top: 40px; left: 100px;';
+        flname.innerHTML = element.fnam+" "+element.lname;
+        divlist.appendChild(flname);
+
+        // create the button object and add the text to it
+       const buttonCategory = document.createElement("BUTTON");
+       buttonCategory.innerHTML = element.category;
+       buttonCategory.setAttribute("class","buttonCategory");
+       buttonCategory.style = 'border-radius: 25px;background: #1E90FF;width: 100px; height:20px; margin: 10px;  border: 1px solid black;  position: absolute; top: 80px;right: 0px;'
+       // add the button to the div
+       divlist.appendChild(buttonCategory);
+
+    });
+
+
+    document.querySelectorAll('.action-category').forEach(item => {
+        item.addEventListener('click', e => {
+            
+            e.preventDefault();
+            const categoryID = e.target.id;
+
+            const clickedCategories = document.querySelectorAll(".DivContainer")
+           
+            clickedCategories.forEach(function(cat){
+                if(cat.dataset.category  === categoryID)
+                {
+                    cat.style.display = 'block'
+                }else{
+                    cat.style.display = 'none'
+                }
+            })
+    
+        })
+      })
+    
+
+}).catch(err => console.error(err));
+
+
+
+
+</script>
+</html>
